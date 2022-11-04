@@ -3,14 +3,16 @@ package com.itqa.testautomation;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.Duration;
-import java.util.concurrent.TimeUnit;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -139,8 +141,10 @@ class TestAutomationApplicationTests {
 		WebElement LogInButton = driver.findElement(By.id("sign-in"));
 		LogInButton.click();
 
+		driver.switchTo().activeElement();
+
 		// Entering incorrect string to the email input
-		WebElement inputEmail = driver.findElement(By.name("username"));
+		WebElement inputEmail = driver.findElement(By.xpath("//*[@id=\"signup-form\"]/div[1]/input"));
 		inputEmail.sendKeys("184152x");
 
 		// Entering a password
@@ -148,7 +152,7 @@ class TestAutomationApplicationTests {
 		password.sendKeys("randompassword");
 
 		// Clicking the submit button
-		WebElement submitButton = driver.findElement(By.className("btn btn-primary btn-block"));
+		WebElement submitButton = driver.findElement(By.xpath("//*[@id=\"signup-form\"]/div[4]/button"));
 		submitButton.click();
 
 		// Verifying the error message
@@ -168,7 +172,7 @@ class TestAutomationApplicationTests {
 		LogInButton.click();
 
 		// Entering string to the email input
-		WebElement inputEmail = driver.findElement(By.name("username"));
+		WebElement inputEmail = driver.findElement(By.xpath("//*[@id=\"signup-form\"]/div[1]/input"));
 		inputEmail.sendKeys("184152x@uom.lk");
 
 		// Entering a password
@@ -176,7 +180,7 @@ class TestAutomationApplicationTests {
 		password.sendKeys("123");
 
 		// Clicking the submit button
-		WebElement submitButton = driver.findElement(By.className("btn btn-primary btn-block"));
+		WebElement submitButton = driver.findElement(By.xpath("//*[@id=\"signup-form\"]/div[4]/button"));
 		submitButton.click();
 
 		// Verifying the error message
@@ -184,14 +188,14 @@ class TestAutomationApplicationTests {
 		assertEquals("Password must be at least 6 characters long", errorMessage.getText());
 
 		// Close the modal
-		WebElement closeButton = driver.findElement(By.className("close"));
+		WebElement closeButton = driver.findElement(By.xpath("//*[@id=\"modal-signup\"]/div/div/button"));
 		closeButton.click();
 	}
 
 	/* Test_06: Verifying that the PDF to PNG function works */
 	@Test
 	@Order(6)
-	public void PDFtoPNG() {
+	public void PDFtoPNG() throws InterruptedException {
 		// Navigating to 123apps.com website
 		driver.get("https://123apps.com/");
 
@@ -199,24 +203,28 @@ class TestAutomationApplicationTests {
 		WebElement pdfToPng = driver.findElement(By.xpath("//*[@id=\"body\"]/div[2]/div[4]/div[3]/div[2]/a[11]"));
 		pdfToPng.click();
 
+		Thread.sleep(1000);
+
 		// Verifying the navigation to PDF to PNG function by checking the Page title
 		String pageHeading = driver.getTitle();
 		assertEquals("Convert PDF to PNG", pageHeading);
 
 		// Clicking the upload button
-		WebElement uploadButton = driver.findElement(By.id("upload_button"));
+		WebElement uploadButton = driver.findElement(By.xpath("//*[@id=\"upload_button\"]/input"));
 
 		// Upload the template pdf
-		uploadButton.sendKeys("Template.pdf");
+		uploadButton.sendKeys("G:\\L4\\S1\\IT QA\\Assessment\\test-automation\\Template.pdf");
 
 		// Select ConvertPages option
 		WebElement convertPages = driver
 				.findElement(By.xpath("//*[@id=\"body\"]/div[2]/div/div/div[2]/div[5]/div[1]/div[1]"));
 		convertPages.click();
 
+		Thread.sleep(10000);
+
 		// Verify completion confirmation message
 		WebElement completionMessage = driver
 				.findElement(By.xpath("//*[@id=\"body\"]/div[2]/div/div/div[2]/div[4]/div[2]"));
-		assertEquals(" Done! ", completionMessage.getText());
+		assertEquals("Done!", completionMessage.getText());
 	}
 }
