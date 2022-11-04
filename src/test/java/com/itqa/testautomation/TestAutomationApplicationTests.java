@@ -86,13 +86,9 @@ class TestAutomationApplicationTests {
 
 		Thread.sleep(1000);
 
-		// // Comparing the page heading
-		WebElement title = driver.findElement(By.xpath("//*[@id=\"body\"]/div[2]/div[1]"));
-		assertEquals("Web-Apps von 123apps", title.getText());
-
 		// Comparing the web URL
-		// String newURL = driver.getCurrentUrl();
-		// assertEquals("https://123apps.com/de/", newURL);
+		String newURL = driver.getCurrentUrl();
+		assertEquals("https://123apps.com/de/", newURL);
 	}
 
 	/*
@@ -101,13 +97,15 @@ class TestAutomationApplicationTests {
 	 */
 	@Test
 	@Order(3)
-	public void PricingChange() {
+	public void PricingChange() throws InterruptedException {
 		// Navigating to 123apps.com website
 		driver.get("https://123apps.com/");
 
 		// Navigating to the pricing page
 		WebElement pricingPage = driver.findElement(By.xpath("//a[@href='/pricing']"));
 		pricingPage.click();
+
+		Thread.sleep(1000);
 
 		// Verifying the navigation to pricing page by checking the Page title
 		String pageHeadingPricing = driver.getTitle();
@@ -119,7 +117,7 @@ class TestAutomationApplicationTests {
 		assertEquals("5", priceMonthly.getText());
 
 		// Changing to monthly options
-		WebElement yearlyButton = driver.findElement(By.className("annual active"));
+		WebElement yearlyButton = driver.findElement(By.className("annual"));
 		yearlyButton.click();
 
 		// Accessing the yearly price value
